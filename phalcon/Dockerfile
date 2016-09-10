@@ -4,7 +4,7 @@ MAINTAINER Pedro Alarcao
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install apache, PHP, and supplimentary programs. openssh-server, curl, and lynx-cur are for debugging the container.
-RUN PACKAGES_TO_INSTALL="sudo apache2 git cron php7.0-dev composer php-xdebug php7.0-mbstring php7.0-curl php7.0-fpm supervisor libyaml-dev php7.0-pgsql libapache2-mod-php7.0 " && \
+RUN PACKAGES_TO_INSTALL="sudo apache2 git cron re2c php7.0-dev composer php-xdebug php7.0-mbstring php7.0-curl php7.0-fpm supervisor libyaml-dev php7.0-pgsql libapache2-mod-php7.0 " && \
     apt-get update && \
     apt-get install -y software-properties-common && \
     apt-add-repository -y ppa:phalcon/stable && \
@@ -19,8 +19,8 @@ RUN a2enmod php7.0
 RUN a2enmod rewrite
 
 RUN git clone --depth=1 https://github.com/phalcon/cphalcon.git /usr/local/src/cphalcon
-RUN cd /usr/local/src/cphalcon/build && ./install ;\
-    echo "extension=phalcon.so" > /etc/php/7.0/mods-available/phalcon.ini && \
+RUN cd /usr/local/src/cphalcon/build && ./install
+RUN echo "extension=phalcon.so" > /etc/php/7.0/mods-available/phalcon.ini && \
     ln -s /etc/php/7.0/mods-available/phalcon.ini /etc/php/7.0/cli/conf.d/50-phalcon.ini && \
     ln -s /etc/php/7.0/mods-available/phalcon.ini /etc/php/7.0/fpm/conf.d/50-phalcon.ini && \
     phpenmod phalcon
