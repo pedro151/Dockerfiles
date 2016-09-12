@@ -1,0 +1,27 @@
+version : '2'
+
+services:
+  web:
+      container_name: web
+      build: ./
+      volumes:
+          - /Users/htdocs/web:/var/www
+      ports:
+          - "80:80"
+          - "443:443"
+      command: /bin/bash
+      tty: true
+      stdin_open: true
+      links:
+          - postgres
+  postgres:
+      container_name: postgres
+      #image: pedro151/postgres
+      build: ../postgres
+      ports:
+          - "5432:5432"
+      volumes:
+          - /Users/postgres:/var/lib/postgresql
+      environment:
+          POSTGRES_PASSWORD: 123
+          POSTGRES_USER: postgres

@@ -55,5 +55,6 @@ RUN echo "<?php phpinfo();" >> /var/www/public/index.php
 VOLUME [ "/var/www" ]
 
 # Update the default apache site with the config we created.
-ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+COPY apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 
+CMD [ "/bin/bash" ]
