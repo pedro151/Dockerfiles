@@ -1,0 +1,10 @@
+    CMD interactive
+        FOR /f "tokens=*" %i IN ('docker-machine env default') DO %i
+    CMD Batch scripts
+        FOR /f "tokens=*" %%i IN ('docker-machine env default') DO %%i
+    PowerShell:
+        docker-machine env default | iex
+    
+
+"C:\Program Files\Git\bin\bash.exe" "/c/bin/phpunit7-xdebug.sh"  -v
+

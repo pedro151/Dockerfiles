@@ -21,14 +21,24 @@ RUN a2enmod rewrite
 RUN git clone --depth=1 https://github.com/phalcon/cphalcon.git /usr/local/src/cphalcon
 RUN cd /usr/local/src/cphalcon/build && ./install
 RUN echo "extension=phalcon.so" > /etc/php/7.0/mods-available/phalcon.ini && \
-    ln -s /etc/php/7.0/mods-available/phalcon.ini /etc/php/7.0/cli/conf.d/50-phalcon.ini && \
-    ln -s /etc/php/7.0/mods-available/phalcon.ini /etc/php/7.0/fpm/conf.d/50-phalcon.ini && \
+    ln -s /etc/php/7.0/mods-available/phalcon.ini /etc/php/7.0/cli/conf.d/20-phalcon.ini && \
+    ln -s /etc/php/7.0/mods-available/phalcon.ini /etc/php/7.0/fpm/conf.d/20-phalcon.ini && \
     phpenmod phalcon
   
 RUN pecl install yaml-beta && \
     echo 'extension=yaml.so' > /etc/php/7.0/mods-available/yaml.ini && \
-    ln -s /etc/php/7.0/mods-available/yaml.ini /etc/php/7.0/cli/conf.d/50-yaml.ini && \
-    ln -s /etc/php/7.0/mods-available/yaml.ini /etc/php/7.0/fpm/conf.d/50-yaml.ini
+    ln -s /etc/php/7.0/mods-available/yaml.ini /etc/php/7.0/cli/conf.d/20-yaml.ini && \
+    ln -s /etc/php/7.0/mods-available/yaml.ini /etc/php/7.0/fpm/conf.d/20-yaml.ini
+
+#set up debugger
+RUN echo "xdebug.remote_enable=on" >> /etc/php/7.0/mods-available/xdebug.ini \
+    && echo "xdebug.idekey=PHPSTORM" >> /etc/php/7.0/mods-available/xdebug.ini  \
+    && echo "xdebug.remote_host=192.168.99.100"  >> /etc/php/7.0/mods-available/xdebug.ini  \
+    && echo "xdebug.remote_port=9000"  >> /etc/php/7.0/mods-available/xdebug.ini  \
+    && echo "xdebug.remote_autostart=on" >> /etc/php/7.0/mods-available/xdebug.ini  \
+    && echo "xdebug.remote_connect_back=on" >> /etc/php/7.0/mods-available/xdebug.ini \
+    && ln -sf /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini \
+    && ln -sf /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.ini
 
 RUN apt-get clean
 
@@ -57,4 +67,4 @@ VOLUME [ "/var/www" ]
 # Update the default apache site with the config we created.
 COPY apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 
-CMD [ "/bin/bash" ]
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]

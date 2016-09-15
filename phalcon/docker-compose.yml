@@ -9,15 +9,14 @@ services:
       ports:
           - "80:80"
           - "443:443"
-      command: /bin/bash
       tty: true
-      stdin_open: true
+      environment:
+        XDEBUG_CONFIG: remote_host=192.168.99.100
       links:
           - postgres
   postgres:
       container_name: postgres
-      #image: pedro151/postgres
-      build: ../postgres
+      image: phalcon_postgres
       ports:
           - "5432:5432"
       volumes:
