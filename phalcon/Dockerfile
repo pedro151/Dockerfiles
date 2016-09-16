@@ -4,15 +4,12 @@ MAINTAINER Pedro Alarcao
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install apache, PHP, and supplimentary programs. openssh-server, curl, and lynx-cur are for debugging the container.
-RUN PACKAGES_TO_INSTALL="sudo apache2 git cron re2c php7.0-dev composer php-xdebug php7.0-mbstring php7.0-curl php7.0-fpm supervisor libyaml-dev php7.0-pgsql libapache2-mod-php7.0 " && \
+RUN PACKAGES_TO_INSTALL="sudo apache2 git cron re2c php7.0-dev composer php-xdebug php7.0-mbstring php7.0-curl php7.0-fpm supervisor libyaml-dev php7.0-pgsql libapache2-mod-php7.0 phpunit" && \
     apt-get update && \
     apt-get install -y software-properties-common && \
     apt-add-repository -y ppa:phalcon/stable && \
     apt-get update && \
-    apt-get install -y $PACKAGES_TO_INSTALL && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    apt-get autoclean
+    apt-get install -y $PACKAGES_TO_INSTALL
 
 # Enable apache mods.
 RUN a2enmod php7.0
@@ -24,23 +21,15 @@ RUN echo "extension=phalcon.so" > /etc/php/7.0/mods-available/phalcon.ini && \
     ln -s /etc/php/7.0/mods-available/phalcon.ini /etc/php/7.0/cli/conf.d/20-phalcon.ini && \
     ln -s /etc/php/7.0/mods-available/phalcon.ini /etc/php/7.0/fpm/conf.d/20-phalcon.ini && \
     phpenmod phalcon
-  
-RUN pecl install yaml-beta && \
-    echo 'extension=yaml.so' > /etc/php/7.0/mods-available/yaml.ini && \
-    ln -s /etc/php/7.0/mods-available/yaml.ini /etc/php/7.0/cli/conf.d/20-yaml.ini && \
-    ln -s /etc/php/7.0/mods-available/yaml.ini /etc/php/7.0/fpm/conf.d/20-yaml.ini
 
-#set up debugger
-RUN echo "xdebug.remote_enable=on" >> /etc/php/7.0/mods-available/xdebug.ini \
-    && echo "xdebug.idekey=PHPSTORM" >> /etc/php/7.0/mods-available/xdebug.ini  \
-    && echo "xdebug.remote_host=192.168.99.100"  >> /etc/php/7.0/mods-available/xdebug.ini  \
-    && echo "xdebug.remote_port=9000"  >> /etc/php/7.0/mods-available/xdebug.ini  \
-    && echo "xdebug.remote_autostart=on" >> /etc/php/7.0/mods-available/xdebug.ini  \
-    && echo "xdebug.remote_connect_back=on" >> /etc/php/7.0/mods-available/xdebug.ini \
+# XDebug
+RUN echo "xdebug.remote_enable=on\nxdebug.idekey=PHPSTORM\nxdebug.remote_host=192.168.99.100\nxdebug.remote_port=9000\nxdebug.remote_autostart=on\nxdebug.remote_connect_back=on" >> /etc/php/7.0/mods-available/xdebug.ini \
     && ln -sf /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini \
     && ln -sf /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.ini
 
-RUN apt-get clean
+RUN  apt-get autoremove -y && \
+     apt-get clean && \
+     apt-get autoclean
 
 # Update the PHP.ini file, enable <? ?> tags and quieten logging.
 RUN sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/7.0/apache2/php.ini
