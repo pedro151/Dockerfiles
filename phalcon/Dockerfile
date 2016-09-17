@@ -4,12 +4,15 @@ MAINTAINER Pedro Alarcao
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install apache, PHP, and supplimentary programs. openssh-server, curl, and lynx-cur are for debugging the container.
-RUN PACKAGES_TO_INSTALL="sudo apache2 git cron re2c php7.0-dev composer php-xdebug php7.0-mbstring php7.0-curl php7.0-fpm supervisor libyaml-dev php7.0-pgsql libapache2-mod-php7.0 phpunit" && \
-    apt-get update && \
-    apt-get install -y software-properties-common && \
-    apt-add-repository -y ppa:phalcon/stable && \
-    apt-get update && \
-    apt-get install -y $PACKAGES_TO_INSTALL
+RUN PACKAGES_TO_INSTALL="sudo apache2 git cron re2c php7.0-dev composer php-xdebug php7.0-mbstring php7.0-curl php7.0-fpm supervisor libyaml-dev php7.0-pgsql libapache2-mod-php7.0 php7.0-phar " \
+    && apt-get update \
+    && apt-get install -y software-properties-common  \
+    && apt-add-repository -y ppa:phalcon/stable \
+    && apt-get update \
+    && apt-get install -y $PACKAGES_TO_INSTALL \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && apt-get autoclean
 
 # Enable apache mods.
 RUN a2enmod php7.0
@@ -23,17 +26,21 @@ RUN echo "extension=phalcon.so" > /etc/php/7.0/mods-available/phalcon.ini && \
     phpenmod phalcon
 
 # XDebug
-RUN echo "xdebug.remote_enable=on\nxdebug.idekey=PHPSTORM\nxdebug.remote_host=192.168.99.100\nxdebug.remote_port=9000\nxdebug.remote_autostart=on\nxdebug.remote_connect_back=on" >> /etc/php/7.0/mods-available/xdebug.ini \
+RUN echo "xdebug.remote_enable=on\nxdebug.idekey=PHPSTORM\nxdebug.remote_host=192.168.99.100\nxdebug.remote_port=9000\nxdebugutostart=on\nxdebug.remote_connect_back=on" >> /etc/php/7.0/mods-available/xdebug.ini \
     && ln -sf /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/cli/conf.d/20-xdebug.ini \
     && ln -sf /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.ini
-
-RUN  apt-get autoremove -y && \
-     apt-get clean && \
-     apt-get autoclean
 
 # Update the PHP.ini file, enable <? ?> tags and quieten logging.
 RUN sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/7.0/apache2/php.ini
 RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.0/apache2/php.ini
+
+
+# install phpunit
+RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar \
+  && chmod +x phpunit.phar \
+  && mv phpunit.phar /usr/local/bin/phpunit \
+  && phpunit --version
+ENV PATH usr/local/bin/phpunit:$PATH
 
 # Manually set up the apache environment variables
 ENV APACHE_RUN_USER www-data

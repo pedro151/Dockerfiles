@@ -6,5 +6,11 @@
         docker-machine env default | iex
     
 
-"C:\Program Files\Git\bin\bash.exe" "/c/bin/phpunit7-xdebug.sh"  -v
+# montar volumes adicionais
+vi /mnt/sda1/var/lib/boot2docker/bootlocal.sh
+
+#!/bin/bash sh
+
+sudo mkdir -p //c/Users
+sudo mount -t vboxsf c/Users //c/Users
 
