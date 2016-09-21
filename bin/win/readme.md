@@ -1,3 +1,4 @@
+
     CMD interactive
         FOR /f "tokens=*" %i IN ('docker-machine env default') DO %i
     CMD Batch scripts
@@ -7,10 +8,24 @@
     
 
 # montar volumes adicionais
-vi /mnt/sda1/var/lib/boot2docker/bootlocal.sh
 
+Execute o ssh boot2docker no terminal com comando:
+
+```bash
+docker-machine ssh
+```
+
+deposi crie o arquivo bootlocal.sh:
+
+```bash
+vi /mnt/sda1/var/lib/boot2docker/bootlocal.sh
+```
+
+e dentro coloque o conteudo
+
+```sh
 #!/bin/bash sh
 
 sudo mkdir -p //c/Users
 sudo mount -t vboxsf c/Users //c/Users
-
+```

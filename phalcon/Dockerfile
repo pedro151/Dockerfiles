@@ -40,7 +40,6 @@ RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar \
   && chmod +x phpunit.phar \
   && mv phpunit.phar /usr/local/bin/phpunit \
   && phpunit --version
-ENV PATH /usr/local/bin/phpunit:$PATH
 
 # Manually set up the apache environment variables
 ENV APACHE_RUN_USER www-data
