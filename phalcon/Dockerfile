@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:16.10
 
 MAINTAINER Pedro Alarcao
 ENV DEBIAN_FRONTEND noninteractive
@@ -7,8 +7,6 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN PACKAGES_TO_INSTALL="sudo apache2 git cron re2c php7.0-dev composer php-xdebug php7.0-mbstring php7.0-curl php7.0-fpm supervisor libyaml-dev php7.0-pgsql libapache2-mod-php7.0 php7.0-phar " \
     && apt-get update \
     && apt-get install -y software-properties-common  \
-    && apt-add-repository -y ppa:phalcon/stable \
-    && apt-get update \
     && apt-get install -y $PACKAGES_TO_INSTALL \
     && apt-get autoremove -y \
     && apt-get clean \
