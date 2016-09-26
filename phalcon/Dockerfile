@@ -29,9 +29,20 @@ RUN echo "xdebug.remote_enable=on\nxdebug.idekey=PHPSTORM\nxdebug.remote_host=19
     && ln -sf /etc/php/7.0/mods-available/xdebug.ini /etc/php/7.0/fpm/conf.d/20-xdebug.ini
 
 # Update the PHP.ini file, enable <? ?> tags and quieten logging.
-RUN sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/7.0/apache2/php.ini
-RUN sed -i "s/error_reporting = .*$/error_reporting = E_ERROR | E_WARNING | E_PARSE/" /etc/php/7.0/apache2/php.ini
-
+RUN sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/7.0/apache2/php.ini \
+        && sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php/7.0/cli/php.ini \
+        && sed -i "s/;date.timezone =/date.timezone = America\/Sao_Paulo/" /etc/php/7.0/cli/php.ini \
+        && sed -i "s/;date.timezone =/date.timezone = America\/Sao_Paulo/" /etc/php/7.0/fpm/php.ini \
+        && sed -i "s/;date.timezone =/date.timezone = America\/Sao_Paulo/" /etc/php/7.0/apache2/php.ini \
+        && sed -i "s/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL/" /etc/php/7.0/cli/php.ini \
+        && sed -i "s/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL/" /etc/php/7.0/fpm/php.ini \
+        && sed -i "s/error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT/error_reporting = E_ALL/" /etc/php/7.0/apache2/php.ini \
+        && sed -i "s/display_errors = Off/display_errors = On/" /etc/php/7.0/cli/php.ini \
+        && sed -i "s/display_errors = Off/display_errors = On/" /etc/php/7.0/fpm/php.ini \
+        && sed -i "s/display_errors = Off/display_errors = On/" /etc/php/7.0/apache2/php.ini \
+        && sed -i "s/display_startup_errors = Off/display_startup_errors = On/" /etc/php/7.0/cli/php.ini \
+        && sed -i "s/display_startup_errors = Off/display_startup_errors = On/" /etc/php/7.0/apache2/php.ini \
+        && sed -i "s/display_startup_errors = Off/display_startup_errors = On/" /etc/php/7.0/fpm/php.ini
 
 # install phpunit
 RUN curl https://phar.phpunit.de/phpunit.phar -L > phpunit.phar \
