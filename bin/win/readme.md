@@ -29,3 +29,21 @@ e dentro coloque o conteudo
 sudo mkdir -p //c/Users
 sudo mount -t vboxsf c/Users //c/Users
 ```
+
+# inicia o ambiente default
+crie a maquina virtual com nome 'default'
+```bash
+docker-machine create --driver virtualbox default
+```
+
+inicia o ambiente default
+```bash
+docker-machine start
+
+docker-machine env --shell cmd default
+```
+
+mostra containers executando (-a mostra containers existentes)
+```bash
+docker ps
+```
