@@ -47,3 +47,29 @@ mostra containers executando (-a mostra containers existentes)
 ```bash
 docker ps
 ```
+
+# criar containers com imagem do ubuntu 16.04 executando o bash
+```bash
+docker run -i -t ubuntu:16.04 /bin/bash
+```
+ (ctrl+p+q) sai do container e deixa executando
+ volta para o container que esta sendo executado
+ ```bash
+docker attach <CONTAINER ID>
+```
+
+#### criar container na porta 8080
+```bash
+docker run -i -t -p 8080:80 ubuntu:16.04 /bin/bash
+```
+ 
+#### cria uma imagem baseada no Dockerfile
+```bash
+docker build -t "simple_flask:dockerfile" .
+```
+#### para criar --volume
+1) deve criar o alias do terminal compartilhando a pasta no virtual box Caminho da pasta : D:\
+Nome da pasta : /Users e marcar (montar automaticamente) o nome da pasta d:\ sera /Users
+```bash
+docker run -it -v /Users/projects:/var/www ubuntu:16.04 /bin/bash
+```
