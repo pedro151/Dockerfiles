@@ -67,6 +67,7 @@ RUN echo "<?php phpinfo();" >> /var/www/public/index.php
 
 # apache mountable directory for apps
 VOLUME [ "/var/www" ]
+WORKDIR /var/www
 
 # Update the default apache site with the config we created.
 COPY apache-config.conf /etc/apache2/sites-enabled/000-default.conf
