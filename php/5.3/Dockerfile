@@ -1,10 +1,9 @@
 FROM koder/apache-php-5.3
 
 MAINTAINER Pedro Alarcao
-ENV DEBIAN_FRONTEND noninteractive
 
 # Install apache, PHP, and supplimentary programs. openssh-server, curl, and lynx-cur are for debugging the container.
-RUN PACKAGES_TO_INSTALL="sudo git re2c php5-xdebug php5-sybase php-apc php5-pgsql php5-cli php5-gd php5-apcu php5-mcrypt php-soap " \
+RUN PACKAGES_TO_INSTALL="sudo git re2c php5-sybase=5.3.29-0ubuntu4 php5-pgsql=5.3.29-0ubuntu4 php5-cli=5.3.29-0ubuntu4 php5-gd=5.3.29-0ubuntu4  php5-mcrypt=5.3.29-0ubuntu4 " \
     && apt-get update \
     && apt-get install -y software-properties-common  \
     && apt-get install -y $PACKAGES_TO_INSTALL \
@@ -30,11 +29,16 @@ RUN sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php5/apache2/php.i
 # Expose apache.
 EXPOSE 80 443
 
+RUN mkdir /var/www/public
+
 # add a phpinfo script for INFO purposes
-RUN echo "<?php phpinfo();" >> /var/www/index.php
+RUN echo "<?php phpinfo();" >> /var/www/public/index.php
 
 # apache mountable directory for apps
 VOLUME [ "/var/www" ]
 WORKDIR /var/www
 
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+# Update the default apache site with the config we created.
+COPY apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+
+ENTRYPOINT service apache2 start && /bin/bash
