@@ -53,4 +53,7 @@ VOLUME [ "/var/www" ]
 WORKDIR /var/www
 
 # Update the default apache site with the config we created.
+COPY apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+
+# Update the default apache site with the config we created.
 CMD service apache2 start && /bin/bash
