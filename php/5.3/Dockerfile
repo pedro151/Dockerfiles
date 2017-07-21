@@ -53,4 +53,4 @@ VOLUME [ "/var/www" ]
 WORKDIR /var/www
 
 # Update the default apache site with the config we created.
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+CMD service apache2 start && /bin/bash
