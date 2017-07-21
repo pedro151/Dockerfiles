@@ -45,6 +45,7 @@ EXPOSE 80 443
 
 # add a phpinfo script for INFO purposes
 RUN echo "<?php phpinfo();" >> /var/www/index.php
+RUN rm /var/www/index.html
 
 # apache mountable directory for apps
 VOLUME [ "/var/www" ]
