@@ -1,12 +1,27 @@
-FROM koder/apache-php-5.3
+FROM ubuntu:12.04
 
 MAINTAINER Pedro Alarcao
 
-# Install apache, PHP, and supplimentary programs. openssh-server, curl, and lynx-cur are for debugging the container.
-RUN PACKAGES_TO_INSTALL="sudo git re2c php5-sybase=5.3.29-0ubuntu4 php5-pgsql=5.3.29-0ubuntu4 php5-cli=5.3.29-0ubuntu4 php5-gd=5.3.29-0ubuntu4  php5-mcrypt=5.3.29-0ubuntu4 " \
-    && apt-get update \
-    && apt-get install -y software-properties-common  \
-    && apt-get install -y $PACKAGES_TO_INSTALL \
+# Instalação dos pacotes
+RUN apt-get update \
+&& apt-get install -y software-properties-common  \
+&& apt-get install -y sudo \
+git \
+apache2 \
+php5 \
+php5-cli \
+php5-common \
+php5-gd \
+php5-curl \
+php5-mcrypt \
+php5-ldap \
+php5-mysql \
+php5-pgsql \
+php5-imagick \
+php5-sybase \
+php5-xdebug \
+php5-apc \
+phpunit \
     && apt-get autoremove -y \
     && apt-get clean \
     && apt-get autoclean
@@ -39,6 +54,4 @@ VOLUME [ "/var/www" ]
 WORKDIR /var/www
 
 # Update the default apache site with the config we created.
-COPY apache-config.conf /etc/apache2/sites-enabled/000-default.conf
-
-ENTRYPOINT service apache2 start && /bin/bash
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
