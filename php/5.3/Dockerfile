@@ -1,4 +1,4 @@
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 
 MAINTAINER Pedro Alarcao
 
@@ -20,7 +20,7 @@ php5-pgsql \
 php5-imagick \
 php5-sybase \
 php5-xdebug \
-php5-apc \
+php-apc \
 phpunit \
     && apt-get autoremove -y \
     && apt-get clean \
