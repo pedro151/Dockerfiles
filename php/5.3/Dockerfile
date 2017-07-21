@@ -43,8 +43,6 @@ RUN sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php5/apache2/php.i
 # Expose apache.
 EXPOSE 80 443
 
-RUN mkdir /var/www
-
 # add a phpinfo script for INFO purposes
 RUN echo "<?php phpinfo();" >> /var/www/index.php
 
