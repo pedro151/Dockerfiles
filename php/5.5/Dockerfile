@@ -20,10 +20,7 @@ php5-imagick \
 php5-sybase \
 php5-xdebug \
 php-apc \
-phpunit \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && apt-get autoclean
+phpunit 
 
 # Enable apache mods.
 RUN a2enmod rewrite
