@@ -36,6 +36,6 @@ EXPOSE 80
 VOLUME [ "/var/www" ]
 
 # Update the default apache site with the config we created.
-COPY apache-config.conf /etc/apache2/sites-enabled/000-default.conf
+COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
