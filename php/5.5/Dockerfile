@@ -1,28 +1,21 @@
-FROM ubuntu:16.10
+FROM debian:jessie
+MAINTAINER  Pedro Alarcao
 
-MAINTAINER Pedro Alarcao
+RUN apt-get update && \
+    apt-get install -y \
+      locales \
+      apache2 \
+      php5 \
+      php5-cli \
+      libapache2-mod-php5 \
+      php-apc \
+      php5-gd \
+      php5-json \
+      php5-ldap \
+      php5-mysql \
+      php5-xdebug \
+      php5-pgsql
 
-# Instalação dos pacotes
-RUN apt-get update \
-&& apt-get install -y sudo \
-git \
-apache2 \
-php5 \
-php5-cli \
-php5-common \
-php5-gd \
-php5-curl \
-php5-mcrypt \
-php5-ldap \
-php5-mysql \
-php5-pgsql \
-php5-imagick \
-php5-sybase \
-php5-xdebug \
-php-apc \
-phpunit 
-
-# Enable apache mods.
 RUN a2enmod rewrite
 
 # Update the PHP.ini file, enable <? ?> tags and quieten logging.
@@ -36,12 +29,8 @@ RUN sed -i "s/short_open_tag = Off/short_open_tag = On/" /etc/php5/apache2/php.i
         && sed -i "s/display_errors = Off/display_errors = On/" /etc/php5/apache2/php.ini \
         && sed -i "s/display_startup_errors = Off/display_startup_errors = On/" /etc/php5/cli/php.ini \
         && sed -i "s/display_startup_errors = Off/display_startup_errors = On/" /etc/php5/apache2/php.ini 
-
-# Expose apache.
-EXPOSE 80 443
-
-# add a phpinfo script for INFO purposes
-RUN echo "<?php phpinfo();" >> /var/www/index.php
+        
+EXPOSE 80
 
 # apache mountable directory for apps
 VOLUME [ "/var/www" ]
